@@ -16,7 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from geo_app.views import GeoView, GeoViewAll
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/geo/', GeoView.as_view()),
+    path('api/v1/geo/all/',GeoViewAll.as_view())
 ]
