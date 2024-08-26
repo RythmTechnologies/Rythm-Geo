@@ -105,3 +105,53 @@ class GeoView(APIView):
         
         except Exception as e:
             return Response({"error": True, "msg": f"An unexpected error occurred: {str(e)}"}, status=500)
+
+class GeoViewAll(APIView):
+    def get(self, request):
+        try:
+            # JSON dosyasını oku
+            with open("geo_app/countries+states+cities.json", "r", encoding="utf-8") as file:
+                data = json.load(file)
+
+            result = []
+
+            # JSON verisinde arama yapma ve gerekli bilgileri toplama
+            for country in data:
+                country_data = {
+                    "id": country["id"],
+                    "name": country["name"],
+                    "phone_code": country["phone_code"],
+                    "capital": country["capital"],
+                    "currency": country["currency"],
+                    "states": []
+                }
+
+                for state in country.get('states', []):
+                    state_data = {
+                        "id": state["id"],
+                        "name": state["name"],
+                        "state_code": state["state_code"],
+                        "cities": []
+                    }
+
+                    for city in state.get('cities', []):
+                        city_data = {
+                            "id": city["id"],
+                            "name": city["name"]
+                        }
+                        state_data["cities"].append(city_data)
+
+                    country_data["states"].append(state_data)
+
+                result.append(country_data)
+
+            return Response({"error": False, "msg": "Geo data retrieved successfully.", "data": result}, status=200)
+        
+        except FileNotFoundError:
+            return Response({"error": True, "msg": "JSON file not found."}, status=500)
+        
+        except json.JSONDecodeError:
+            return Response({"error": True, "msg": "Failed to decode JSON."}, status=500)
+        
+        except Exception as e:
+            return Response({"error": True, "msg": f"An unexpected error occurred: {str(e)}"}, status=500)
