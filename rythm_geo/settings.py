@@ -25,7 +25,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ENVIROMENT
 load_dotenv()
 
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY")
 
@@ -34,6 +33,9 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+
+# CORS
 
 CORS_ALLOWED_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
